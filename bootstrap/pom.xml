@@ -40,42 +40,81 @@
             <artifactId>logback-classic</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.2</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 
     <build>
         <plugins>
 
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-dependency-plugin</artifactId>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>copy-dependencies</id>-->
+<!--                        <phase>prepare-package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>copy-dependencies</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <outputDirectory>${project.build.directory}/libs</outputDirectory>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-jar-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <archive>-->
+<!--                        <manifest>-->
+<!--                            <classpathPrefix>libs/</classpathPrefix>-->
+<!--                            <mainClass>${exec.mainClass}</mainClass>-->
+<!--                        </manifest>-->
+<!--                    </archive>-->
+<!--                    <outputDirectory>${project.parent.basedir}/${distribution.dir}/bootstrap</outputDirectory>-->
+<!--                </configuration>-->
+<!--             </plugin>-->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
+                <artifactId>maven-shade-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>copy-dependencies</id>
-                        <phase>prepare-package</phase>
                         <goals>
-                            <goal>copy-dependencies</goal>
+                            <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/libs</outputDirectory>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>dist</shadedClassifierName>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>${exec.mainClass}</mainClass>
+                                </transformer>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer"/>
+<!--                                <transformer implementation="org.apache.maven.plugins.shade.resource.properties.PropertiesTransformer">-->
+<!--                                    <resource>bootstrap.properties</resource>-->
+<!--                                    <resource>logback.xml</resource>-->
+<!--                                </transformer>-->
+                            </transformers>
+
+                            <outputDirectory>${project.parent.basedir}/${distribution.dir}/bootstrap</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <classpathPrefix>libs/</classpathPrefix>
-                            <mainClass>${exec.mainClass}</mainClass>
-                        </manifest>
-                    </archive>
-                    <outputDirectory>${project.parent.basedir}/${distribution.dir}/bootstrap</outputDirectory>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 

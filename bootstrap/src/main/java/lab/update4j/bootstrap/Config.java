@@ -10,7 +10,7 @@ import java.util.Properties;
 @Slf4j
 public class Config {
 
-    private static  String FILE = "create.config.properties";
+    private static  String FILE = "bootstrap.properties";
 
     private static final Config config;
 

@@ -1,12 +1,33 @@
 = lab-update4j
 
+== prepare
+
 [source,bash]
 ----
+# building
+./mvnw clean package
+
+# create configuration
+ java -jar  create-config/target/*.jar
+
+----
+
+== installing
+[source,bash]
+----
+# simulate remote server
 python3 -m http.server -d dist  8081
 
+#
+# choose a dir to install application
 
+# install
 java -jar update4j-1.5.6.jar \
-    --remote localhost:8080/setup.xml
+    --remote localhost:8081/setup.xml
+
+# next launching
+java -jar bootstrap/*.jar
+
 ----
 
 == reference
